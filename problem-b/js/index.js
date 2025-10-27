@@ -2,16 +2,20 @@
 
 /* Define a function `addFour()` that takes a single argument 
    and returns a value 4 greater than the input.*/
-
+   function addFour(x) {
+    return typeof x === 'string' ? x + '4' : x + 4;
+  }
    
 /* Create and log a variable `twelve` that is the result of passing 8 to your
    addFour() function. */
-
+   const twelveString = addFour('8');
+   console.log(twelveString);
    
 /* Create and log a variable `twelveString` that is the result of passing "8" 
    (a string) to your addFour() function. Consider what this tells you about how
   the function should be explained (e.g., in a comment). */
-
+  const twelve = addFour(8);
+  console.log(twelve);
   
 
 /* Define a function `compoundInterest()` that takes three parameters: 
@@ -26,6 +30,10 @@
      http://www.mathwarehouse.com/calculators/continuous-compound-interest-calculator.php
 */
 
+function compoundInterest(principal, rate, years) {
+  return principal * Math.exp(rate * years);
+}
+
 
 
 /* Define a function `fizzBuzz()` that takes in a single number as an argument.
@@ -36,7 +44,17 @@
    should contain "FizzBuzz" instead of the number.
    The returned array should be empty for arguments less than 1. */
 
-   
+   function fizzBuzz(n) {
+    const arr = [];
+    for (let i = 1; i <= n; i++) {
+      let val = '';
+      if (i % 3 === 0) val += 'Fizz';
+      if (i % 5 === 0) val += 'Buzz';
+      arr.push(val || i);
+    }
+    return arr;
+  }
+  
 
 /* Define a function `getLetterFrequencies()` that takes in a single string as 
    an argument. The function should *return* an Object whose keys are characters
@@ -47,7 +65,14 @@
    each letter, increase the value associated with that key by one. Watch out 
    for if the letter is not in the Object yet!
    You can test this method with a word like "Mississippi". */
-
+   function getLetterFrequencies(str) {
+    const freq = {};
+    for (const ch of str) {
+      freq[ch] = (freq[ch] || 0) + 1;
+    }
+    return freq;
+  }
+  
    
 
 /* Create a variable `deck` that represents a deck of modern playing cards
@@ -61,29 +86,40 @@
     the `deck` array! 
     
     You can log out the `deck` to check your work! */
-
+    const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+    const deck = [];
+    for (const suit of suits) {
+      for (let rank = 2; rank <= 14; rank++) {
+        deck.push({ suit, rank });
+      }
+    }
     
 
 //You can test the below functions by creating e.g., a `pokerHand` array that 
 //contains five cards from the `deck`.
-
 /* Define a function `containsQueenOfHearts()` that takes in an array of "card"
    objects (e.g., a Poker hand) and returns whether or not the Queen of Hearts
    is in that array.
    Hint: use a loop to check each card. */
-
+   function containsQueenOfHearts(cards) {
+    return cards.some(c => c.rank === 12 && c.suit === 'hearts');
+  }
    
 
 /* Define a function `getHighCard()` that takes in an array of "card" objects
   and returns the card object with the highest value. The "high card" is the one
   with the highest rank. Cards of different suits but the same rank are 
   considered to have the same value, and either is a valid result */
-
+  function getHighCard(cards) {
+    return cards.reduce((high, c) => (c.rank > high.rank ? c : high));
+  }
   
 
 /* Define a function `isFlush()` that takes in an array of "card" objects and
    returns whether or not the cards all have the same _suit_. */
-
+   function isFlush(cards) {
+    return cards.every(c => c.suit === cards[0].suit);
+  }
    
 
 /* Extra challenge: define a function `hasPair()` that takes in an array of 
@@ -91,7 +127,21 @@
    cards with the same _rank_) in the array.
    Double challenge: return the rank of the pair of cards with the highest rank 
    (e.g., if the hand contains more than one pair!) */
+   function hasPair(cards) {
+    let highest = false;
+  
+    for (const card of cards) {
+      const matches = cards.filter(c => c.rank === card.rank);
+      if (matches.length > 1) {
+        highest = highest ? Math.max(highest, card.rank) : card.rank;
+      }
+    }
+  
+    return highest;
+  }
+  void hasPair;
 
+  
 
 
 //Make functions and variables available to tester. DO NOT MODIFY THIS.

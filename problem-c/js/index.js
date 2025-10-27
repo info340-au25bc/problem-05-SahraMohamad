@@ -37,42 +37,60 @@ let huskyGames2016 = [
 //Define a function `extractOpponent()` that takes in a "game" object and returns
 //UW's opponent (whether or not that was the home team!)
 //You can test this by passing in an individual element from the array.
-
+function extractOpponent(game) {
+  return game.home === 'UW' ? game.opponent : game.home;
+}
 
 //Use the `map()` method and your `extractOpponent()` function to create an array
 //of UW's opponents for the season (in the same order as in the `huskyGames2016`).
 //The opponents in the list do not need to be unique.
 //Log out the opponents array.
-
-
+const opponents = huskyGames2016.map(extractOpponent);
+console.log(JSON.stringify(opponents));
 //Define a function `huskiesLost()` that takes in a "game" object and returns
 //whether or not UW lost.
+function huskiesLost(game) {
+  const uw = game.home === 'UW' ? game.home_score : game.opponent_score;
+  const opp = game.home === 'UW' ? game.opponent_score : game.home_score;
+  return uw < opp;
+}
 
 
 //Use the `filter()` method to create an array of games that UW lost (a smaller
 //array than the games they won!)
 //Log out the array of lost games.
-
+const lostGames = huskyGames2016.filter(huskiesLost);
+console.log(JSON.stringify(lostGames));
 
 //Log out an array of opponents that UW lost to. Hint: Use the `.map()` method 
 //to extract the opponent names!
-
+const lostOpponents = lostGames.map(extractOpponent);
+console.log(JSON.stringify(lostOpponents));
 
 //Use a `forEach()` loop to log out each of the games UW lost, each on its own 
 //line, in the following format:
 //    "Rutgers at UW, 13 to 48"
 //You should use an anonymous callback function.
-
+lostGames.forEach(g => {
+  const uwHome = g.home === 'UW';
+  console.log(`${extractOpponent(g)} at ${uwHome ? 'UW' : g.home}, ${uwHome ? g.opponent_score : g.home_score} to ${uwHome ? g.home_score : g.opponent_score}`);
+});
 
 //Use the `filter()` method with an anonymous callback function to get an array
 //of games where UW had at least one fumble.
 //Log out HOW MANY games included fumbles.
+const fumbleGames = huskyGames2016.filter(g => g.fumbles > 0);
+console.log(String(fumbleGames.length));
 
 
 //Define a function `mostYardsPassing()` that takes in two "game" objects and
 //returns the game that has a greater number of passing yards.
 //Your function should handle the case where the _first_ game has no 
 //`passing_yards` property, in which case it should return the second game.
+function mostYardsPassing(a, b) {
+  if (!a.passing_yards) return b;
+  return Math.max(a.passing_yards, b.passing_yards) === a.passing_yards ? a : b;
+}
 
 
 //Create a variable `mostPassingGame` that refers to the "game" that had the most
@@ -83,6 +101,8 @@ let huskyGames2016 = [
 // - Consider: why do this with `reduce()` instead of `filter()`?
 //
 //Log out the game with the most passing yards.
+const mostPassingGame = huskyGames2016.reduce(mostYardsPassing, {});
+console.log(JSON.stringify(mostPassingGame));
 
 
 
@@ -94,6 +114,9 @@ let huskyGames2016 = [
 //game object and returns the result of passing that object to both of the 
 //callback functions and "anding" (&&) the results. The `makeCombinedFilter()` 
 //function should then return this new function.
+function makeCombinedFilter(fn1, fn2) {
+  return g => fn1(g) && fn2(g);
+}
 
 
 //Create a variable `fumbledAndLostFilter` which is the result of calling the 
@@ -102,12 +125,13 @@ let huskyGames2016 = [
 //one for filtering for games with fumbles (this can be a named or an anonymous
 //callback like you used earlier).
 //Note that `fumbledAndLostFilter` _is_ a function!
-
+const fumbledAndLostFilter = makeCombinedFilter(huskiesLost, g => g.fumbles > 0);
 
 //Create an array of games that UW lost with fumbles. Use the 
 //`fumbledAndLostFilter()` function as a callback to the `filter()` method.
 //Log out the array of games lost with fumbles.
-
+const lostWithFumbles = huskyGames2016.filter(fumbledAndLostFilter);
+console.log(JSON.stringify(lostWithFumbles));
 
 
 //OPTIONAL extra practice: create a variable `avgScoreDifference` that
